@@ -1,5 +1,4 @@
 from flask import (
-<<<<<<< HEAD
     Blueprint, flash, g, redirect, render_template, request, url_for
 )
 from werkzeug.exceptions import abort
@@ -28,14 +27,3 @@ def index():
                                     filename=filename))
     
     return render_template('summary/index.html')
-=======
-	Blueprint, flash, g, redirect, render_template, request, url_for
-)
-from werkzeug.exceptions import abort
-
-bp = Blueprint('summary', __name__)
-@bp.route('/')
-def index():
-	# blah
-	return render_template('summary/index.html')
->>>>>>> b31b7c531f473bb9bb90d4006387c3435479bfda
