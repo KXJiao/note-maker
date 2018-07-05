@@ -12,8 +12,12 @@
 {% block content %}
     <div id ="input">
         <p id="result"></p>
+<<<<<<< HEAD
         <!-- action= "{{ url_for('static', filename='upload.php') }}" -->
         <form method="post" enctype="multipart/form-data" target="upload_target" >
+=======
+        <form action= "{{ url_for('static', filename='upload.php') }}" method="post" enctype="multipart/form-data" target="upload_target" >
+>>>>>>> b31b7c531f473bb9bb90d4006387c3435479bfda
             File: <input name="file" type="file" />
                 <input type="submit" name="submitBtn" value="Upload" />
         </form>
