@@ -1,6 +1,6 @@
 <?php
    	$destination_path = getcwd().DIRECTORY_SEPARATOR;
- 
+    print(getcwd().DIRECTORY_SEPARATOR);
 	$result = 0;
  
    	$target_path = $destination_path . basename( $_FILES['file']['name']);
