@@ -1,0 +1,16 @@
+MANIFEST.in
+README.md
+setup.py
+researchtime/__init__.py
+researchtime/summary.py
+researchtime.egg-info/PKG-INFO
+researchtime.egg-info/SOURCES.txt
+researchtime.egg-info/dependency_links.txt
+researchtime.egg-info/not-zip-safe
+researchtime.egg-info/requires.txt
+researchtime.egg-info/top_level.txt
+researchtime/static/app.js
+researchtime/static/style.css
+researchtime/static/upload.php
+researchtime/templates/base.html
+researchtime/templates/summary/index.html

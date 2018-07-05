@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
-<head>
+{% block head %}
     <title>{% block title %}{% endblock %} - ResearchTime</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
+{% endblock %}
 <body>
     <nav>
         <h1>ResearchTime</h1>

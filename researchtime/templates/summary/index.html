@@ -1,9 +1,24 @@
 {% extends 'base.html' %}
 
+{% block head %}
+    {{ super() }}
+    <script src = "{{ url_for('static', filename='app.js') }}"></script>
+{% endblock %}
 {% block header %}
-  <h1>{% block title %}Summarize{% endblock %}</h1>
+    <h1>{% block title %}Summarizer{% endblock %}</h1>
 {% endblock %}
 
+
 {% block content %}
-	
+    <div id ="input">
+        <p id="result"></p>
+        <form action= "{{ url_for('static', filename='upload.php') }}" method="post" enctype="multipart/form-data" target="upload_target" >
+            File: <input name="file" type="file" />
+                <input type="submit" name="submitBtn" value="Upload" />
+        </form>
+        <iframe id="upload_target" name="upload_target" src="#" style="width:0;height:0;border:0px solid #fff;"></iframe>
+    </div>
+    <div id ="compare">
+        <input id = "compare" type = "button" onclick = "compare()" value = "Compare Documents">
+    </div>
 {% endblock %}
