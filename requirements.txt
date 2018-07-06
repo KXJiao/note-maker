@@ -1,0 +1,3 @@
+requests>=2.19
+gunicorn>=19.9
+https://github.com/deanmalmgren/textract
