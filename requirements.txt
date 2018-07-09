@@ -1,3 +1,4 @@
 requests>=2.19
 gunicorn>=19.9
 git+git://github.com/KXJiao/textract
+sumy>=0.7
