@@ -22,7 +22,10 @@ def summarize(text):
     parser = PlaintextParser.from_string(text, Tokenizer("english"))
     summarizer = LexRankSummarizer()
     summary = summarizer(parser.document, 5)
-    return str(summary)
+    summarized = ""
+    for sentence in summary:
+        summarized = summarized + sentence + '\n'
+    return summarized
 
 bp = Blueprint('summary', __name__)
 @bp.route('/', methods=['GET', 'POST'])
