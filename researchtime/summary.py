@@ -1,6 +1,7 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for, current_app
+    Blueprint, flash, g, redirect, render_template, request, url_for
 )
+from flask import current_app as app
 from werkzeug.exceptions import abort
 from werkzeug.utils import secure_filename
 import os
@@ -25,7 +26,9 @@ def index():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+            print(file.filename)
+            print(filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             print(url_for('uploaded_file', filename=filename))
             return redirect(url_for('uploaded_file',
                                     filename=filename))
