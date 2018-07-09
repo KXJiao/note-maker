@@ -24,7 +24,7 @@ def summarize(text):
     summary = summarizer(parser.document, 5)
     summarized = ""
     for sentence in summary:
-        summarized = summarized + sentence + '\n'
+        summarized = summarized + str(sentence) + '\n'
     return summarized
 
 bp = Blueprint('summary', __name__)
@@ -49,7 +49,7 @@ def index():
     #         print(url_for('uploaded_file', filename=filename))
     #         return redirect(url_for('uploaded_file',
     #                                 filename=filename))
-    processed = "None"
+    processed = ""
     if request.method == 'POST':
         raw_text = request.form['text']
         processed = summarize(raw_text)
