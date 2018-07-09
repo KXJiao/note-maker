@@ -45,10 +45,12 @@ def index():
     #         print(url_for('uploaded_file', filename=filename))
     #         return redirect(url_for('uploaded_file',
     #                                 filename=filename))
+    return render_template('summary/index.html')
+
+@bp.route('/process/', methods=['POST'])
+def processed():
     raw_text = request.form['text']
     processed = summarize(raw_text)
-
-
 
     
     return render_template('summary/index.html', message = processed)
