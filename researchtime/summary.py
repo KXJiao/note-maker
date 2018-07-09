@@ -31,6 +31,7 @@ bp = Blueprint('summary', __name__)
 @bp.route('/', methods=['GET', 'POST'])
 def index():
     processed = ''
+    upload = False
     if request.method == 'POST':
         if 'compare' in request.form:
             raw_text = request.form['text']
@@ -49,11 +50,13 @@ def index():
                 filename = secure_filename(file.filename)
                 basedir = os.path.abspath(os.path.dirname(__file__))
                 file.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
-
                 tobeprocessed = textract.process(url_for('summary.uploaded_file', filename=filename))
                 processed = summarize(tobeprocessed)
 
+                os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
+
                 return render_template('summary/processed.html', processed = processed)
+
 
     return render_template('summary/index.html', processed = processed)
 
