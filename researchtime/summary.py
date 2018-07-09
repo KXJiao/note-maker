@@ -19,7 +19,7 @@ def allowed_file(filename):
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def summarize(text):
-    parser = PlaintextParser.from_string(raw_text, Tokenizer("english"))
+    parser = PlaintextParser.from_string(text, Tokenizer("english"))
     summarizer = LexRankSummarizer()
     summary = summarizer(parser.document, 5)
     return str(summary)
