@@ -13,7 +13,7 @@
     <div id ="input">
         <p id="result"></p>
         <!-- action= "{{ url_for('static', filename='upload.php') }}" -->
-        <form method="post" enctype="multipart/form-data" target="upload_target" >
+        <form method="post" enctype="multipart/form-data">
             File: <input name="file" type="file" />
                 <input type="submit" name="submitBtn" value="Upload" />
         </form>
@@ -21,7 +21,7 @@
     </div>
     <div id ="compare">
         <form method="post">
-            <textarea name = "text" rows = "8" cols = "70"></textarea>
+            <textarea name = "text" rows = "8" cols = "70"></textarea><br>
             <input name = "compare" type = "submit" value = "Compare Documents">
         </form>
     {{ processed }}
