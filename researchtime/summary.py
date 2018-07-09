@@ -59,5 +59,5 @@ def textsummary():
     return render_template('summary/processed.html')
 
 @bp.route('/tmp/<filename>')
-def uploaded_file():
+def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
