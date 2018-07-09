@@ -4,7 +4,7 @@ from flask import Flask
 from . import summary
 
 
-UPLOAD_FOLDER = 'static/uploads/'
+UPLOAD_FOLDER = '/tmp/'
 
 
 
