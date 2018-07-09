@@ -4,7 +4,7 @@ from flask import Flask
 from . import summary
 
 
-UPLOAD_FOLDER = join(dirname(realpath(__file__)), 'static/uploads/')
+UPLOAD_FOLDER = 'static/uploads/'
 
 
 

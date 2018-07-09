@@ -5,6 +5,7 @@ from flask import current_app as app
 from werkzeug.exceptions import abort
 from werkzeug.utils import secure_filename
 import os
+from os.path import abspath
 import textract
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'doc', 'docx', 'html', 'htm', 'epub'])
@@ -30,8 +31,8 @@ def index():
             print(filename)
             print(app.config['UPLOAD_FOLDER'])
             print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            #file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            file.save(app.config['UPLOAD_FOLDER'])
+            basedir = os.path.abspath(os.path.dirname(__file__))
+            file.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
             print(url_for('uploaded_file', filename=filename))
             return redirect(url_for('uploaded_file',
                                     filename=filename))
