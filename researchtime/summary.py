@@ -28,6 +28,8 @@ def index():
             filename = secure_filename(file.filename)
             print(file.filename)
             print(filename)
+            print(app.config['UPLOAD_FOLDER'])
+            print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             print(url_for('uploaded_file', filename=filename))
             return redirect(url_for('uploaded_file',
