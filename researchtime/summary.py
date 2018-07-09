@@ -6,10 +6,10 @@ from werkzeug.exceptions import abort
 from werkzeug.utils import secure_filename
 import os
 from os.path import abspath
-#Import library essentials
-from sumy.parsers.plaintext import PlaintextParser #We're choosing a plaintext parser here, other parsers available for HTML etc.
+from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer 
-from sumy.summarizers.lex_rank import LexRankSummarizer #We're choosing Lexrank, other algorithms are also built in
+from sumy.summarizers.lex_rank import LexRankSummarizer
+import random
 import textract
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'doc', 'docx', 'html', 'htm', 'epub'])
@@ -22,9 +22,9 @@ def summarize(text):
     parser = PlaintextParser.from_string(text, Tokenizer('english'))
     summarizer = LexRankSummarizer()
     summary = summarizer(parser.document, 5)
-    summarized = ''
+    summarized = []
     for sentence in summary:
-        summarized = summarized + str(sentence) + '\\n'
+        summarized.append(str(sentence))
     return summarized
 
 bp = Blueprint('summary', __name__)
@@ -55,6 +55,15 @@ def index():
                 print(url_for('uploaded_file', filename=filename))
                 return redirect(url_for('uploaded_file', filename=filename))
 
-        
     return render_template('summary/index.html', processed = processed)
+
+@bp.route('/textsummary')
+def textsummary():
+    processed = ''
+    if request.method == 'POST':
+        raw_text = request.form['text']
+        if raw_text != '':
+            processed = summarize(raw_text)
+    return render_template('summary/processed.html', processed = processed)
+
 
