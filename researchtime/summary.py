@@ -38,6 +38,7 @@ def index():
             if raw_text != '':
                 processed = summarize(raw_text)
                 return render_template('summary/processed.html', processed = processed)
+            return ''
         elif 'upload' in request.form:
             if 'file' not in request.files:
                 flash('No file part')
