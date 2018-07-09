@@ -47,10 +47,6 @@ def index():
                 return redirect(request.url)
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
-                print(file.filename)
-                print(filename)
-                print(app.config['UPLOAD_FOLDER'])
-                print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 basedir = os.path.abspath(os.path.dirname(__file__))
                 file.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
                 print(url_for('uploaded_file', filename=filename))
