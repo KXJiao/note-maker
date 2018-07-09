@@ -57,6 +57,7 @@ def index():
                 os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
 
                 return render_template('summary/processed.html', processed = processed)
+            return 'File not allowed'
 
 
     return render_template('summary/index.html', processed = processed)
