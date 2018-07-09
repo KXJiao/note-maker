@@ -15,7 +15,7 @@
             <div id ="input">
                 <p id="result"></p>
                 <!-- action= "{{ url_for('static', filename='upload.php') }}" -->
-                <form method="post" enctype="multipart/form-data">
+                <form target = "textsummary" method="post" enctype="multipart/form-data">
                     File: <input name="file" type="file" />
                         <input type="submit" name="upload" value="Upload" />
                 </form>
@@ -31,7 +31,6 @@
         </div>
 
         <div id = "right" style = "float:right; width:50%;">
-            <iframe id="upload_target" name="upload_target" src="#" style="width:0;height:0;border:0px solid #fff;"></iframe>
             <iframe name = "textsummary" frameborder='0' noresize='noresize' style='position: absolute; background: transparent; width: 50%; height:100%;' src="/textsummary"></iframe>
         </div>
     </div>

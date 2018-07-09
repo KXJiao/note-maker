@@ -50,7 +50,10 @@ def index():
                 basedir = os.path.abspath(os.path.dirname(__file__))
                 file.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
 
-                return redirect(url_for('summary.uploaded_file', filename=filename))
+                tobeprocessed = textract.process(url_for('summary.uploaded_file', filename=filename))
+                processed = summarize(tobeprocessed)
+
+                return render_template('summary/processed.html', processed = processed)
 
     return render_template('summary/index.html', processed = processed)
 
