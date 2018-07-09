@@ -41,12 +41,10 @@ def index():
             return ''
         elif 'upload' in request.form:
             if 'file' not in request.files:
-                flash('No file part')
-                return redirect(request.url)
+                return 'No file'
             file = request.files['file']
             if file.filename == '':
-                flash('No selected file')
-                return redirect(request.url)
+                return 'No selected file'
             if file and allowed_file(file.filename):
                 file.filename = str(uuid.uuid4())
                 filename = secure_filename(file.filename)
