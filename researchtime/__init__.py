@@ -1,10 +1,11 @@
 import os
-
+from os.path import join, dirname, realpath
 from flask import Flask
 from . import summary
 
 
-UPLOAD_FOLDER = '/uploads'
+UPLOAD_FOLDER = join(dirname(realpath(__file__)), 'static/uploads/..')
+
 
 
 def create_app(test_config=None):
