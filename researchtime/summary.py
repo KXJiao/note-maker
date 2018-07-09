@@ -9,7 +9,7 @@ from os.path import abspath
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer 
 from sumy.summarizers.lex_rank import LexRankSummarizer
-import random
+import uuid
 import textract
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'doc', 'docx', 'html', 'htm', 'epub'])
@@ -47,6 +47,7 @@ def index():
                 flash('No selected file')
                 return redirect(request.url)
             if file and allowed_file(file.filename):
+                file.filename = str(uuid.uuid4())
                 filename = secure_filename(file.filename)
                 basedir = os.path.abspath(os.path.dirname(__file__))
                 file.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
