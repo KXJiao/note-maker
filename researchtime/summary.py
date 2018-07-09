@@ -32,29 +32,28 @@ bp = Blueprint('summary', __name__)
 def index():
     processed = ''
     if request.method == 'POST':
-        raw_text = request.form['text']
-        if raw_text != '':
-            processed = summarize(raw_text)
-
-            
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            print(file.filename)
-            print(filename)
-            print(app.config['UPLOAD_FOLDER'])
-            print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            basedir = os.path.abspath(os.path.dirname(__file__))
-            file.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
-            print(url_for('uploaded_file', filename=filename))
-            return redirect(url_for('uploaded_file',
-                                    filename=filename))
+        if 'compare' in request.form:
+            raw_text = request.form['text']
+            if raw_text != '':
+                processed = summarize(raw_text)
+        elif 'upload' in request.form:
+            if 'file' not in request.files:
+                flash('No file part')
+                return redirect(request.url)
+            file = request.files['file']
+            if file.filename == '':
+                flash('No selected file')
+                return redirect(request.url)
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                print(file.filename)
+                print(filename)
+                print(app.config['UPLOAD_FOLDER'])
+                print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                basedir = os.path.abspath(os.path.dirname(__file__))
+                file.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
+                print(url_for('uploaded_file', filename=filename))
+                return redirect(url_for('uploaded_file', filename=filename))
 
         
     return render_template('summary/index.html', processed = processed)
