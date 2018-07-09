@@ -21,7 +21,7 @@ def allowed_file(filename):
 def summarize(text):
     summarizer = LexRankSummarizer()
     summary = summarizer(text, 5)
-    return summary
+    return str(summary)
 
 bp = Blueprint('summary', __name__)
 @bp.route('/', methods=['GET', 'POST'])
