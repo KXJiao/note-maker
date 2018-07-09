@@ -50,7 +50,7 @@ def index():
                 basedir = os.path.abspath(os.path.dirname(__file__))
                 file.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
 
-                return redirect(url_for('uploaded_file', filename=filename))
+                return redirect(url_for('summary.uploaded_file', filename=filename))
 
     return render_template('summary/index.html', processed = processed)
 
