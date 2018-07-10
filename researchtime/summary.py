@@ -6,7 +6,7 @@ from werkzeug.exceptions import abort
 from werkzeug.utils import secure_filename
 import os
 from os.path import abspath
-import LexRank
+from . import LexRank
 import uuid
 import textract
 
