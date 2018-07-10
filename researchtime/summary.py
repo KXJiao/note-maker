@@ -6,7 +6,7 @@ from werkzeug.exceptions import abort
 from werkzeug.utils import secure_filename
 import os
 from os.path import abspath
-from . import LexRank
+from LexRank import summarize
 import uuid
 import textract
 
@@ -27,7 +27,7 @@ def index():
         if 'compare' in request.form:
             raw_text = request.form['text']
             if raw_text != '':
-                processed = LexRank.summarize(raw_text, SUMMARY_SENTENCES)
+                processed = summarize(raw_text, SUMMARY_SENTENCES)
                 return render_template('summary/processed.html', processed = processed)
             return ''
         elif 'upload' in request.form:
@@ -42,7 +42,7 @@ def index():
                 basedir = os.path.abspath(os.path.dirname(__file__))
                 file.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
                 tobeprocessed = textract.process(url_for('summary.uploaded_file', filename=filename))
-                processed = LexRank.summarize(tobeprocessed, SUMMARY_SENTENCES)
+                processed = summarize(tobeprocessed, SUMMARY_SENTENCES)
 
                 os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
 
