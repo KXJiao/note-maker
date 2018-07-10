@@ -6,26 +6,17 @@ from werkzeug.exceptions import abort
 from werkzeug.utils import secure_filename
 import os
 from os.path import abspath
-from sumy.parsers.plaintext import PlaintextParser
-from sumy.nlp.tokenizers import Tokenizer 
-from sumy.summarizers.lex_rank import LexRankSummarizer
+import LexRank
 import uuid
 import textract
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'doc', 'docx', 'html', 'htm', 'epub'])
+SUMMARY_SENTENCES = 5
 
 def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-def summarize(text):
-    parser = PlaintextParser.from_string(text, Tokenizer('english'))
-    summarizer = LexRankSummarizer()
-    summary = summarizer(parser.document, 5)
-    summarized = []
-    for sentence in summary:
-        summarized.append(str(sentence))
-    return summarized
 
 bp = Blueprint('summary', __name__)
 @bp.route('/', methods=['GET', 'POST'])
@@ -36,7 +27,7 @@ def index():
         if 'compare' in request.form:
             raw_text = request.form['text']
             if raw_text != '':
-                processed = summarize(raw_text)
+                processed = LexRank.summarize(raw_text, SUMMARY_SENTENCES)
                 return render_template('summary/processed.html', processed = processed)
             return ''
         elif 'upload' in request.form:
@@ -51,7 +42,7 @@ def index():
                 basedir = os.path.abspath(os.path.dirname(__file__))
                 file.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
                 tobeprocessed = textract.process(url_for('summary.uploaded_file', filename=filename))
-                processed = summarize(tobeprocessed)
+                processed = LexRank.summarize(tobeprocessed, SUMMARY_SENTENCES)
 
                 os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
 
