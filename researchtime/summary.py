@@ -41,9 +41,16 @@ bp = Blueprint('summary', __name__)
 @bp.route('/', methods=['GET', 'POST'])
 def index():
     processed = ''
-    upload = False
     if request.method == 'POST':
-        sentenceNum = int(request.form['sentNum'])
+        sentenceNum = 5
+        try:
+            snum = int(request.form['sentNum'])
+            if(snum >0 and snum < 100)
+            sentenceNum = snum
+        except:
+            sentenceNum = 5
+
+        
         if 'compare' in request.form:
             raw_text = request.form['text']
             if raw_text != '':
