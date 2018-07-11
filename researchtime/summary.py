@@ -6,6 +6,10 @@ from werkzeug.exceptions import abort
 from werkzeug.utils import secure_filename
 import os
 from os.path import abspath
+from sumy.parsers.plaintext import PlaintextParser
+from sumy.nlp.tokenizers import Tokenizer 
+from sumy.summarizers.lex_rank import LexRankSummarizer
+import requests
 import uuid
 import textract
 
@@ -54,6 +58,17 @@ def index():
 
                 return render_template('summary/processed.html', processed = processed)
             return 'File not allowed'
+        # elif 'external' in request.form:
+        #     #add code to check if proper url
+        #     link = request.form['url']
+        #     r = requests.get(link, allow_redirects=True)
+        #     file = open('download', 'wb')
+        #     basedir = os.path.abspath(os.path.dirname(__file__))
+
+
+
+        #     return
+
 
 
     return render_template('summary/index.html', processed = processed)
@@ -65,3 +80,4 @@ def textsummary():
 @bp.route('/tmp/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
