@@ -64,8 +64,9 @@ def index():
                 return 'No selected file'
             if file and allowed_file(file.filename):
                 ext = file.filename.rsplit('.', 1)[1].lower()
-                file.filename = str(uuid.uuid4()) + ext
+                file.filename = str(uuid.uuid4()) + '.' + ext
                 filename = secure_filename(file.filename)
+                print(filename)
                 basedir = os.path.abspath(os.path.dirname(__file__))
                 file.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
                 tobeprocessed = textract.process(url_for('summary.uploaded_file', filename=filename))
