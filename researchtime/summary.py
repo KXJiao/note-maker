@@ -17,8 +17,7 @@ import textract
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'doc', 'docx', 'html', 'htm', 'epub'])
 
 def allowed_file(filename):
-    return '.' in filename and \
-        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def summarize(text, num):
     parser = PlaintextParser.from_string(text, Tokenizer('english'))
@@ -64,7 +63,8 @@ def index():
             if file.filename == '':
                 return 'No selected file'
             if file and allowed_file(file.filename):
-                file.filename = str(uuid.uuid4())
+                ext = file.filename.rsplit('.', 1)[1].lower()
+                file.filename = str(uuid.uuid4()) + ext
                 filename = secure_filename(file.filename)
                 basedir = os.path.abspath(os.path.dirname(__file__))
                 file.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
