@@ -15,15 +15,21 @@
             <div id ="input">
                 <!-- action= "{{ url_for('static', filename='upload.php') }}" -->
                 <form target = "textsummary" method="post" enctype="multipart/form-data">
-                    File: <input name="file" type="file" />
-                        <input type="submit" name="upload" value="Upload" />
-
-                    <textarea name = "text" rows = "8" cols = "70" style="resize: vertical;"></textarea><br>
-                    <input name = "compare" type = "submit" value = "Summarize">
-
-                    <input type="text" name="url">
-                    <input type="submit" name="external" value = "Submit">
-                    <input type = "text" name = "sentNum" placeholder="Number of sentences">
+                    <div>
+                        File: <input name="file" type="file" />
+                            <input type="submit" name="upload" value="Upload" />
+                    </div>
+                    <div>
+                        <textarea name = "text" rows = "8" cols = "70" style="resize: vertical;"></textarea><br>
+                        <input name = "compare" type = "submit" value = "Summarize">
+                    </div>
+                    <div>
+                        <input type="text" name="url">
+                        input type="submit" name="external" value = "Submit">
+                    </div>
+                    <div>
+                        <input type = "text" name = "sentNum" placeholder="Number of sentences">
+                    </div>
                 </form>
             </div>
         </div>
