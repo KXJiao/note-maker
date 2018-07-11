@@ -45,8 +45,8 @@ def index():
         sentenceNum = 5
         try:
             snum = int(request.form['sentNum'])
-            if(snum >0 and snum < 100)
-            sentenceNum = snum
+            if snum >0 and snum < 100:
+                sentenceNum = snum
         except:
             sentenceNum = 5
 

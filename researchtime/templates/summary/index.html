@@ -14,7 +14,11 @@
         <div id = "left" style = "float:left; width:50%;">
             <div id ="input">
                 <!-- action= "{{ url_for('static', filename='upload.php') }}" -->
+
                 <form target = "textsummary" method="post" enctype="multipart/form-data">
+                    <div>
+                        <input type = "text" name = "sentNum" placeholder="Number of sentences">
+                    </div>
                     <div>
                         File: <input name="file" type="file" />
                             <input type="submit" name="upload" value="Upload" />
@@ -24,11 +28,8 @@
                         <input name = "compare" type = "submit" value = "Summarize">
                     </div>
                     <div>
-                        <input type="text" name="url" placeholder="">
+                        <input type="text" name="url" placeholder="External URL">
                         <input type="submit" name="external" value = "Submit">
-                    </div>
-                    <div>
-                        <input type = "text" name = "sentNum" placeholder="Number of sentences">
                     </div>
                 </form>
             </div>
