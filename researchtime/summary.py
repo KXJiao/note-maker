@@ -71,6 +71,8 @@ def index():
             #add code to check if proper url
             link = request.form['url']
             r = requests.get(link, allow_redirects=True)
+            print(r)
+            print(r.headers.get('content-disposition'))
             filename = get_filename(r.headers.get('content-disposition'))
             print(filename)
             basedir = os.path.abspath(os.path.dirname(__file__))
