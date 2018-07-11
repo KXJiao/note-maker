@@ -73,7 +73,7 @@ def index():
             r = requests.get(link, allow_redirects=True)
             filename = get_filename(r.headers.get('content-disposition'))
             basedir = os.path.abspath(os.path.dirname(__file__))
-            with app.open_instance_resouce(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename), 'wb') as f:
+            with open(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename), 'wb') as f:
                 f.write(r.content)
 
             unprocessed = textract.process(url_for('summary.uploaded_file', filename=filename))
