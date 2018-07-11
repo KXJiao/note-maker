@@ -10,6 +10,7 @@ from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer 
 from sumy.summarizers.lex_rank import LexRankSummarizer
 import requests
+import re
 import uuid
 import textract
 
@@ -27,6 +28,14 @@ def summarize(text):
     for sentence in summary:
         summarized.append(str(sentence))
     return summarized
+
+def get_filename(cd):
+    if not cd:
+        return None
+    fname = re.findall('filename=(.+)', cd)
+    if len(fname) == 0:
+        return None
+    return fname[0]
 
 bp = Blueprint('summary', __name__)
 @bp.route('/', methods=['GET', 'POST'])
@@ -58,16 +67,21 @@ def index():
 
                 return render_template('summary/processed.html', processed = processed)
             return 'File not allowed'
-        # elif 'external' in request.form:
-        #     #add code to check if proper url
-        #     link = request.form['url']
-        #     r = requests.get(link, allow_redirects=True)
-        #     file = open('download', 'wb')
-        #     basedir = os.path.abspath(os.path.dirname(__file__))
+        elif 'external' in request.form:
+            #add code to check if proper url
+            link = request.form['url']
+            r = requests.get(link, allow_redirects=True)
+            filename = get_filename(r.headers.get('content-disposition'))
+            basedir = os.path.abspath(os.path.dirname(__file__))
+            with app.open_instance_resouce(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename), 'wb') as f:
+                f.write(r.content)
 
+            unprocessed = textract.process(url_for('summary.uploaded_file', filename=filename))
+            processed = summarize(unprocessed)
 
+            os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
 
-        #     return
+            return render_template('summary/processed.html', processed = processed)
 
 
 
@@ -80,4 +94,3 @@ def textsummary():
 @bp.route('/tmp/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
-
