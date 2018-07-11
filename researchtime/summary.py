@@ -20,10 +20,10 @@ def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-def summarize(text):
+def summarize(text, num):
     parser = PlaintextParser.from_string(text, Tokenizer('english'))
     summarizer = LexRankSummarizer()
-    summary = summarizer(parser.document, 5)
+    summary = summarizer(parser.document, num)
     summarized = []
     for sentence in summary:
         summarized.append(str(sentence))
@@ -43,10 +43,11 @@ def index():
     processed = ''
     upload = False
     if request.method == 'POST':
+        sentenceNum = int(request.form['sentNum'])
         if 'compare' in request.form:
             raw_text = request.form['text']
             if raw_text != '':
-                processed = summarize(raw_text)
+                processed = summarize(raw_text, sentenceNum)
                 return render_template('summary/processed.html', processed = processed)
             return ''
         elif 'upload' in request.form:
@@ -61,7 +62,7 @@ def index():
                 basedir = os.path.abspath(os.path.dirname(__file__))
                 file.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
                 tobeprocessed = textract.process(url_for('summary.uploaded_file', filename=filename))
-                processed = summarize(tobeprocessed)
+                processed = summarize(tobeprocessed, sentenceNum)
 
                 os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
 
@@ -80,7 +81,7 @@ def index():
                 f.write(r.content)
 
             unprocessed = textract.process(url_for('summary.uploaded_file', filename=filename))
-            processed = summarize(unprocessed)
+            processed = summarize(unprocessed, sentenceNum)
 
             os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
 
