@@ -12,6 +12,7 @@ from sumy.summarizers.lex_rank import LexRankSummarizer
 import requests
 import uuid
 import textract
+import validators
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'doc', 'docx', 'html', 'htm', 'epub'])
 
@@ -68,26 +69,30 @@ def index():
 
                 return render_template('summary/processed.html', processed = processed)
             return 'File not allowed'
+
         elif 'external' in request.form:
             #add code to check if proper url
             link = request.form['url']
+            if link == '' or not validators.url(link):
+                return 'Bad URL'
             r = requests.get(link, allow_redirects=True)
-            #filename = ""
-            #if link.find('/'):
             filename = link.rsplit('/', 1)[1]
-            ext = filename.rsplit('.', 1)[1].lower()
-            filename = str(uuid.uuid4()) + '.' + ext 
-            basedir = os.path.abspath(os.path.dirname(__file__))
-            print(basedir)
-            with app.open_instance_resource(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename), 'wb') as f:
-                f.write(r.content)
+            print(filename)
+            if r and allowed_file(filename):
+                ext = filename.rsplit('.', 1)[1].lower()
+                filename = str(uuid.uuid4()) + '.' + ext 
+                basedir = os.path.abspath(os.path.dirname(__file__))
+                print(basedir)
+                with app.open_instance_resource(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename), 'wb') as f:
+                    f.write(r.content)
 
-            unprocessed = textract.process(url_for('summary.uploaded_file', filename=filename))
-            processed = summarize(unprocessed, sentenceNum)
+                unprocessed = textract.process(url_for('summary.uploaded_file', filename=filename))
+                processed = summarize(unprocessed, sentenceNum)
 
-            os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
+                os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
 
-            return render_template('summary/processed.html', processed = processed)
+                return render_template('summary/processed.html', processed = processed)
+            return 'File not allowed'
 
 
 

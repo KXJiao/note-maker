@@ -1,6 +1,6 @@
-requests>=2.19
-gunicorn>=19.9
+requests==2.19.1
+gunicorn==19.9.0
 git+git://github.com/KXJiao/textract
-sumy>=0.7
-numpy>=1.14
-
+sumy==0.7.0
+numpy==1.14.5
+validators==0.12.2
