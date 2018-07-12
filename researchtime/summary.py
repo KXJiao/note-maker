@@ -10,7 +10,6 @@ from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer 
 from sumy.summarizers.lex_rank import LexRankSummarizer
 import requests
-import re
 import uuid
 import textract
 
@@ -28,13 +27,6 @@ def summarize(text, num):
         summarized.append(str(sentence))
     return summarized
 
-def get_filename(cd):
-    if not cd:
-        return None
-    fname = re.findall('filename=(.+)', cd)
-    if len(fname) == 0:
-        return None
-    return fname[0]
 
 bp = Blueprint('summary', __name__)
 @bp.route('/', methods=['GET', 'POST'])
@@ -80,13 +72,13 @@ def index():
             #add code to check if proper url
             link = request.form['url']
             r = requests.get(link, allow_redirects=True)
-            
-            print(r)
-            print(r.headers.get('content-disposition'))
-            filename = get_filename(r.headers.get('content-disposition'))
-            print(filename)
+            #filename = ""
+            #if link.find('/'):
+            filename = link.rsplit('/', 1)[1]
             basedir = os.path.abspath(os.path.dirname(__file__))
-            with open(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename), 'wb') as f:
+            print(basedir)
+            with app.open_instance_resource(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename), 'wb') as f:
+                print(r.content)
                 f.write(r.content)
 
             unprocessed = textract.process(url_for('summary.uploaded_file', filename=filename))
