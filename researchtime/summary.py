@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for, send_from_directory
+    Blueprint, flash, g, redirect, render_template, request, url_for, send_from_directory, jsonify
 )
 from flask import current_app as app
 from werkzeug.exceptions import abort
@@ -14,7 +14,7 @@ import uuid
 import textract
 import validators
 
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'doc', 'docx', 'html', 'htm', 'epub'])
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'doc', 'docx', 'html', 'htm', 'epub', 'jpg', 'jpeg', 'png'])
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -33,6 +33,7 @@ bp = Blueprint('summary', __name__)
 @bp.route('/', methods=['GET', 'POST'])
 def index():
     processed = ''
+    filecontent = ''
     if request.method == 'POST':
         sentenceNum = 5
         try:
@@ -42,13 +43,16 @@ def index():
         except:
             sentenceNum = 5
 
-        
+        #Summarize textbox
         if 'compare' in request.form:
             raw_text = request.form['text']
             if raw_text != '':
+                filecontent = raw_text
                 processed = summarize(raw_text, sentenceNum)
-                return render_template('summary/processed.html', processed = processed)
+                return render_template('summary/processed.html', processed=processed, filecontent=filecontent)
             return ''
+
+        #Summarize uploaded file
         elif 'upload' in request.form:
             if 'file' not in request.files:
                 return 'No file'
@@ -59,7 +63,7 @@ def index():
                 ext = file.filename.rsplit('.', 1)[1].lower()
                 file.filename = str(uuid.uuid4()) + '.' + ext
                 filename = secure_filename(file.filename)
-                print(filename)
+                print("uploading: " + filename)
                 basedir = os.path.abspath(os.path.dirname(__file__))
                 file.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
                 tobeprocessed = textract.process(url_for('summary.uploaded_file', filename=filename))
@@ -67,9 +71,10 @@ def index():
 
                 os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
 
-                return render_template('summary/processed.html', processed = processed)
+                return render_template('summary/processed.html', processed=processed, filecontent=tobeprocessed)
             return 'File not allowed'
 
+        #Summarize file from URL
         elif 'external' in request.form:
             #add code to check if proper url
             link = request.form['url']
@@ -77,12 +82,11 @@ def index():
                 return 'Bad URL'
             r = requests.get(link, allow_redirects=True)
             filename = link.rsplit('/', 1)[1]
-            print(filename)
+            print("downloading: " + filename)
             if r and allowed_file(filename):
                 ext = filename.rsplit('.', 1)[1].lower()
                 filename = str(uuid.uuid4()) + '.' + ext 
                 basedir = os.path.abspath(os.path.dirname(__file__))
-                print(basedir)
                 with app.open_instance_resource(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename), 'wb') as f:
                     f.write(r.content)
 
@@ -91,16 +95,44 @@ def index():
 
                 os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
 
-                return render_template('summary/processed.html', processed = processed)
+                return render_template('summary/processed.html', processed=processed, filecontent=unprocessed)
             return 'File not allowed'
 
 
 
-    return render_template('summary/index.html', processed = processed)
+    return render_template('summary/index.html', processed=processed, filecontent=filecontent)
 
 @bp.route('/textsummary')
 def textsummary():
     return render_template('summary/processed.html')
+    
+
+'''
+@bp.route('/summarize', methods=['GET', 'POST'])
+def smmze(info):
+    sm_type = request.form.get('type')
+    senNum = 5
+    try:
+        snum = int(request.form.get('num'))
+        if snum >0 and snum < 50:
+            senNum = snum
+    except:
+        senNumNum = 5
+
+    if sm_type == 'text':
+        text = request.form.get('data')
+        if text != '':
+            processed = summarize(raw_text, senNum)
+            return jsonify(og=text,summary=processed)
+        return jsonify(og='',summary='')
+
+    elif sm_type == 'upload':
+        pass
+'''  
+
+
+
+
 
 @bp.route('/tmp/<filename>')
 def uploaded_file(filename):
