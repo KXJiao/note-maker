@@ -1,19 +1,37 @@
-function compare() {
-	
-}
+// $(document).ready(function(){
+//     var files;
+//     $('input[type=file]').on('change', prepareUpload);
 
-function startUpload(){
-      document.getElementById('f1_upload_form').style.visibility = 'hidden';
-      return true;
-}
 
-function stopUpload(success){
-    var result = '';
-    if (success == 1){
-    	document.getElementById('result').innerHTML ='<span class="msg">Success<\/span><br/><br/>';
-    }
-    else{
-        document.getElementById('result').innerHTML = '<span class="emsg">Error<\/span><br/><br/>';
-    }
-    return true;   
-}
+//     function prepareUpload(e){
+//         files =  e.target.files;
+//     }
+//     $('#upload').on('click', uploadFiles);
+
+//     function uploadFiles(e){
+//         var data = new FormData();
+//         $.each(files, function(key,value){
+//             data.append(key, value);
+//         });
+
+//         $.ajax({
+//             url: 'upload.php',
+//             type: 'POST',
+//             data: data,
+//             cache: false,
+//             dataType: 'json',
+//             contentType: false,
+//             success: function(data, status, jqXHR){
+//                 if(typeof data.error == 'undefined'){
+//                     sub////////////////edit
+//                 }
+//             },
+//             error: function(jqXHR, status, error){
+//                 console.log(status)
+//             }
+//         });
+
+//     }
+
+
+// });

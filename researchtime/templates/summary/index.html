@@ -3,6 +3,9 @@
 {% block head %}
     {{ super() }}
     <script src = "{{ url_for('static', filename='app.js') }}"></script>
+    <script src = "https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="simpleUpload.min.js"></script>
+
 {% endblock %}
 {% block header %}
     <h1>{% block title %}Summarizer{% endblock %}</h1>
@@ -21,8 +24,8 @@
                     </div>
                     <hr>
                     <div>
-                        File: <input name="file" type="file" />
-                            <input type="submit" name="upload" value="Upload" />
+                        File: <input name="file" type="file" id = "file" />
+                            <input type="submit" name="upload" id = "upload" value="Upload" />
                     </div>
                     <hr>
                     <div>
