@@ -2,10 +2,9 @@
 
 {% block head %}
     {{ super() }}
+    <script src = "{{ url_for('static', filename='jquery-3.3.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='jquery.form.min.js') }}"></script>
     <script src = "{{ url_for('static', filename='app.js') }}"></script>
-    <script src = "https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <!-- <script type="text/javascript" src="simpleUpload.min.js"></script> -->
-
 {% endblock %}
 {% block header %}
     <h1>{% block title %}Summarizer{% endblock %}</h1>
@@ -17,32 +16,35 @@
         <div id = "left" style = "float:left; width:50%;">
             <div id ="input">
                 <!-- action= "{{ url_for('static', filename='upload.php') }}" -->
-
-                <form target = "textsummary" method="post" enctype="multipart/form-data">
-                    <div>
-                        <input type = "text" name = "sentNum" placeholder="Number of sentences">
-                    </div>
-                    <hr>
+                <div>
+                        <input type = "text" pattern = "\d*" name = "sentNum" id = "sentNum" placeholder="Number of sentences">
+                </div>
+                <hr>
+                <form action = "upload.php" method="post" enctype="multipart/form-data" id = "fileupload" target="textsummary">
                     <div>
                         File: <input name="file" type="file" id = "file" />
                             <input type="submit" name="upload" id = "upload" value="Upload" />
                     </div>
-                    <hr>
-                    <div>
-                        <textarea name = "text" rows = "8" cols = "70" style="resize: vertical;"></textarea><br>
+                </form>
+                <hr>
+                <form method="post" id="textbox">
+                        <textarea name = "text" id = "textarea" rows = "8" cols = "70" style="resize: vertical;"></textarea><br>
                         <input name = "compare" type = "submit" value = "Summarize">
-                    </div>
-                    <hr>
+                </form>
+                <hr>
+                <form target = "textsummary" method="post" id="externalurl">
                     <div>
                         <input type="text" name="url" placeholder="External URL">
                         <input type="submit" name="external" value = "Submit">
                     </div>
                 </form>
             </div>
+            <div id="highlighttext"></div>
         </div>
 
         <div id = "right" style = "float:right; width:50%;">
-            <iframe name = "textsummary" frameborder='0' noresize='noresize' style='position: absolute; background: transparent; width: 50%; height:100%;' src="/textsummary"></iframe>
+<!--             <iframe name = "textsummary" frameborder='0' noresize='noresize' style='position: absolute; background: transparent; width: 50%; height:100%;' src="/textsummary"></iframe> -->
+            <div id="textsummary" style='position: absolute; background: transparent; width: 50%; height:100%;'></div>
         </div>
     </div>
     
