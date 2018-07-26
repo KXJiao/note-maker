@@ -13,6 +13,7 @@ import requests
 import uuid
 import textract
 import validators
+import sys
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'doc', 'docx', 'html', 'htm', 'epub', 'jpg', 'jpeg', 'png'])
 
@@ -105,35 +106,36 @@ def index():
 @bp.route('/textsummary')
 def textsummary():
     return render_template('summary/processed.html')
-    
 
-'''
+
+
 @bp.route('/summarize', methods=['GET', 'POST'])
-def smmze(info):
-    sm_type = request.form.get('type')
+def smmze():
+    data = request.get_json()
+    print(data, file=sys.stderr)
+    print(request.data, file=sys.stderr)
+    sm_type = data.get('type')
     senNum = 5
     try:
-        snum = int(request.form.get('num'))
+        snum = int(data.get('num'))
+        print(snum, file=sys.stderr)
         if snum >0 and snum < 50:
             senNum = snum
     except:
         senNumNum = 5
 
     if sm_type == 'text':
-        text = request.form.get('data')
+        text = data.get('data')
         if text != '':
-            processed = summarize(raw_text, senNum)
-            return jsonify(og=text,summary=processed)
-        return jsonify(og='',summary='')
+            # send the highlighted text as well
+            processed = summarize(text, senNum)
+
+            return jsonify(og=text,summary=processed)#highlight='blahblah'
+        return jsonify(og='',summary='')#highlight=''
 
     elif sm_type == 'upload':
         pass
-'''  
-
-
-
-
-
+    return "lol"
 @bp.route('/tmp/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
