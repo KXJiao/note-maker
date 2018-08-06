@@ -40,7 +40,7 @@ def summary(text, num):
 	# decompressedFile = gzip.GzipFile(fileobj=compressedFile)
 
 
-	model=gensim.models.KeyedVectors.load_word2vec_format("https://raw.githubusercontent.com/eyaler/word2vec-slim/master/GoogleNews-vectors-negative300-SLIM.bin.gz", binary=True, limit=100000)
+	model=gensim.models.KeyedVectors.load_word2vec_format("https://github.com/eyaler/word2vec-slim/blob/master/GoogleNews-vectors-negative300-SLIM.bin.gz?raw=true", binary=True, limit=100000)
 	#words=open("subInfo.txt").read()
 	words = text
 	txt = words
