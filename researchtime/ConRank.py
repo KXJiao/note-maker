@@ -32,15 +32,15 @@ def addOne(dic,k):
 def summary(text, num):
 	start = time.time()
 	
-	baseURL = "https://raw.githubusercontent.com/eyaler/word2vec-slim/master/"
-	filename = "GoogleNews-vectors-negative300-SLIM.bin.gz"
-	outFilePath = "GoogleNews-vectors-negative300-SLIM.bin"
-	response = urlopen(baseURL + filename)
-	compressedFile = io.BytesIO(response.read())
-	decompressedFile = gzip.GzipFile(fileobj=compressedFile)
+	# baseURL = "https://raw.githubusercontent.com/eyaler/word2vec-slim/master/"
+	# filename = "GoogleNews-vectors-negative300-SLIM.bin.gz"
+	# outFilePath = "GoogleNews-vectors-negative300-SLIM.bin"
+	# response = urlopen(baseURL + filename)
+	# compressedFile = io.BytesIO(response.read())
+	# decompressedFile = gzip.GzipFile(fileobj=compressedFile)
 
 
-	model=gensim.models.KeyedVectors.load_word2vec_format(decompressedFile, binary=True, limit=100000)
+	model=gensim.models.KeyedVectors.load_word2vec_format("https://raw.githubusercontent.com/eyaler/word2vec-slim/master/GoogleNews-vectors-negative300-SLIM.bin.gz", binary=True, limit=100000)
 	#words=open("subInfo.txt").read()
 	words = text
 	txt = words
