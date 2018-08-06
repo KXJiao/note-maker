@@ -1,4 +1,5 @@
 import re
+from flask import url_for
 dic={}
 def addWord(word):
 	tDic=dic
