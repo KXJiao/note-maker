@@ -1,4 +1,5 @@
 import re
+import os
 dic={}
 def addWord(word):
 	tDic=dic
@@ -11,7 +12,8 @@ def addWord(word):
 			tDic=tDic[prtW]
 
 testArr=[]
-lines=open("/researchtime/static/biology_terms.txt").readlines()
+basedir = os.path.abspath(os.path.dirname(__file__))
+lines=open(os.path.join(basedir, "static", "biology_terms.txt")).readlines()
 for i in range(len(lines)):
 	lines[i]=lines[i].strip()
 
