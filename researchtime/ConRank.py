@@ -8,6 +8,7 @@ from nltk.stem import PorterStemmer
 from . import bioSearchTree as bst
 import re
 import math
+import os
 
 def add(dic,k,v):
 	if k in dic.keys():
@@ -27,7 +28,8 @@ def addOne(dic,k):
 
 def summary(text, num):
 	start = time.time()
-	model=gensim.models.KeyedVectors.load_word2vec_format('https://raw.githubusercontent.com/eyaler/word2vec-slim/master/GoogleNews-vectors-negative300-SLIM.bin.gz', binary=True, limit=100000)
+	basedir = os.path.abspath(os.path.dirname(__file__))
+	model=gensim.models.KeyedVectors.load_word2vec_format(os.path.join(basedir, 'static','GoogleNews-vectors-negative300-SLIM.bin'), binary=True, limit=100000)
 	#words=open("subInfo.txt").read()
 	words = text
 	txt = words
