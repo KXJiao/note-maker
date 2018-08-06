@@ -9,6 +9,9 @@ from . import bioSearchTree as bst
 import re
 import math
 import os
+import gzip
+from urllib.request import urlopen
+import StringIO
 
 def add(dic,k,v):
 	if k in dic.keys():
@@ -28,8 +31,16 @@ def addOne(dic,k):
 
 def summary(text, num):
 	start = time.time()
-	basedir = os.path.abspath(os.path.dirname(__file__))
-	model=gensim.models.KeyedVectors.load_word2vec_format(os.path.join(basedir, 'static','GoogleNews-vectors-negative300-SLIM.bin'), binary=True, limit=100000)
+	
+	baseURL = "https://raw.githubusercontent.com/eyaler/word2vec-slim/master/"
+	filename = "GoogleNews-vectors-negative300-SLIM.bin.gz"
+	outFilePath = "GoogleNews-vectors-negative300-SLIM.bin"
+	response = urlopen(baseURL + filename)
+	compressedFile = StringIO.StringIO(response.read())
+	decompressedFile = gzip.GzipFile(fileobj=compressedFile)
+
+
+	model=gensim.models.KeyedVectors.load_word2vec_format(decompressedFile, binary=True, limit=100000)
 	#words=open("subInfo.txt").read()
 	words = text
 	txt = words
