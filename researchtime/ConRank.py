@@ -36,7 +36,7 @@ def summary(text, num):
 	filename = "GoogleNews-vectors-negative300-SLIM.bin.gz"
 	outFilePath = "GoogleNews-vectors-negative300-SLIM.bin"
 	response = urlopen(baseURL + filename)
-	compressedFile = io.StringIO(response.read())
+	compressedFile = io.BytesIO(response.read())
 	decompressedFile = gzip.GzipFile(fileobj=compressedFile)
 
 
