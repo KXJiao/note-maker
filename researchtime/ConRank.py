@@ -27,7 +27,7 @@ def addOne(dic,k):
 
 def summary(text, num):
 	start = time.time()
-	model=gensim.models.KeyedVectors.load_word2vec_format('https://s3.amazonaws.com/dl4j-distribution/GoogleNews-vectors-negative300.bin.gz', binary=True, limit=100000)
+	model=gensim.models.KeyedVectors.load_word2vec_format('https://raw.githubusercontent.com/eyaler/word2vec-slim/master/GoogleNews-vectors-negative300-SLIM.bin.gz', binary=True, limit=100000)
 	#words=open("subInfo.txt").read()
 	words = text
 	txt = words
