@@ -15,7 +15,7 @@ import textract
 import validators
 import sys
 # ConRank imports
-import ConRank
+from . import ConRank
 
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'doc', 'docx', 'html', 'htm', 'epub', 'jpg', 'jpeg', 'png'])
