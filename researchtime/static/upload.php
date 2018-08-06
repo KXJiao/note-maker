@@ -1,31 +1,10 @@
 <?php
-
-if(isset($_FILES["file"]) && $_FILES["file"]["error"]== UPLOAD_ERR_OK)
-{
-    ############ Edit settings ##############
-    $UploadDirectory    = 'tmp/'; //specify upload directory ends with / (slash)
-    ##########################################
+$data = array();
+if(isset($_GET['files'])){
+    $error = false;
+    $files = array();
     
-    /*
-    Note : You will run into errors or blank page if "memory_limit" or "upload_max_filesize" is set to low in "php.ini". 
-    Open "php.ini" file, and search for "memory_limit" or "upload_max_filesize" limit 
-    and set them adequately, also check "post_max_size".
-    */
-    
-    //check if this is an ajax request
-    if (!isset($_SERVER['HTTP_X_REQUESTED_WITH'])){
-        die();
-    }
-    
-    
-    //Is file size is less than allowed size.
-    if ($_FILES["file"]["size"] > 52428800) {
-        die("File size is too big!");
-    }
-    
-    //allowed file type Server side check
-    switch(strtolower($_FILES['file']['type']))
-        {
+    switch(strtolower($_FILES['files']['type'])){
             //allowed file types
             case 'image/png': 
             case 'image/jpeg': 
@@ -40,25 +19,30 @@ if(isset($_FILES["file"]) && $_FILES["file"]["error"]== UPLOAD_ERR_OK)
             default:
                 die('Unsupported File!'); //output error
     }
-    
-    $File_Name          = strtolower($_FILES['file']['name']);
+
+    $File_Name          = strtolower($_FILES['files']['name']);
     $File_Ext           = substr($File_Name, strrpos($File_Name, '.')); //get file extention
     $Random_Number      = rand(0, 9999999999); //Random number to be added to name.
     $NewFileName        = $Random_Number.$File_Ext; //new file name
-    
-    if(move_uploaded_file($_FILES['file']['tmp_name'], $UploadDirectory.$NewFileName ))
-       {
-        //echo $UploadDirectory.$NewFileName;
-        // echo '<script>';
-        // // echo '$("#ogtext").text();';
-        // echo '</script>';
-        die('Success! File Uploaded.');
-    }else{
-        die('error uploading File!');
+
+    $uploaddir = '../../tmp/';
+
+    foreach($_FILES as $file){
+      //if(move_uploaded_file($_FILES['file']['tmp_name'], $UploadDirectory.$NewFileName ))
+        if(move_uploaded_file($file['tmp_name', $uploaddir .$NewFileName )){
+            $files[] = $uploaddir .$NewFileName;
+        }
+        else{
+            $error = true;
+        }
     }
+    $data = ($error) ? array('error' => 'error') : array('files' => $files);
     
 }
-else
-{
-    die('Something wrong with upload! Is "upload_max_filesize" set correctly?');
+else{
+    $data = array('success' => 'submitted', 'formData' => $_POST);
 }
+
+echo json_encode($data);
+
+?>

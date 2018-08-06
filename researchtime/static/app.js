@@ -36,54 +36,105 @@
 
 // });
 
+    // var options = { 
+    //     target:   '#output',    
+    //     beforeSubmit:  beforeSubmit,   
+    //     success:       afterSuccess,
+    //     resetForm: true         
+    // }; 
+
 
 $(document).ready(function() { 
     console.log('ready');
-    var options = { 
-        target:   '#output',    
-        beforeSubmit:  beforeSubmit,   
-        success:       afterSuccess,
-        resetForm: true         
-    }; 
-    $('#fileupload').submit(function() { 
-        $(this).ajaxSubmit(options);                
-        return false; 
+
+    var files;
+    $('#file').on('change', function(event) { 
+        files = event.target.files;
     }); 
 
+    $('#fileupload').on('submit', function(event){
+        event.stopPropagation();
+        event.preventDefault();
+
+        var data = new FormData();
+        $.each(files, function(key, value){
+            data.append(key, value);
+        });
+
+        $.ajax({
+            url: 'upload.php',
+            type: 'post',
+            contentType: false,
+            processData: false,
+            data: data,
+            success: function(data, textStatus, jqXHR){
+                //send another ajax to do the textract/stuff 
+                if(typeof data.error === 'undefined'){
+                    var filename = data.files[Object.keys(data.files)[0]];
+                    var ext = filename.slice((Math.max(0, filename.lastIndexOf(".")) || Infinity) + 1);
+
+                    $.each(data.files, function(key, value){
+                        filenames.append(value);
+                    });
+
+                    $.ajax({
+                        url: '/summarize',
+                        type: 'post',
+                        contentType: 'application/json; charset=utf8',
+                        dataType: 'json',
+                        data: JSON.stringify({
+                            name = filename,
+                            type = ext,
+
+                        })
+                    });
+                }
+                else{
+                    console.log(data.error);
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                console.log(textStatus);
+                return "error"
+            } //return "error: " + errorThrown
+        })
+    });
+
     var request;
-    $('#textbox').on('submit', function(e){
+    $('#textbox').on('submit', function(event){
         console.log("reached textbox");
-        e.preventDefault();
+        event.preventDefault();
         var sentNum = $('#sentNum').val()
         var text = $('#textarea').val()
+
         console.log(sentNum);
         console.log(text);
-        $.ajax({
-            url: '/summarize',
-            type: 'post',
-            contentType: 'application/json; charset=utf8',
-            dataType: 'json',
-            data: JSON.stringify({
-                type: 'text',
-                num: sentNum,
-                data: text
-            }),
-            success: function(data){
-                // highlight the text returned
-                console.log(data.og)
-                console.log(data.summary)
-                $("#highlighttext").text(data.og)
-                summaryString = ""
-                $("#textsummary").text("")
-                for(i = 0; i<data.summary.length; i++){
-                    $("#textsummary").append("<li>" + data.summary[i] + "</li>")
-                }
-                return "blah"
-            },
-            error: function(error){
-                return "error"
-            }
-        });
+        // $.ajax({
+        //     url: '/summarize',
+        //     type: 'post',
+        //     contentType: 'application/json; charset=utf8',
+        //     dataType: 'json',
+        //     data: JSON.stringify({
+        //         type: 'text',
+        //         num: sentNum,
+        //         data: text
+        //     }),
+        //     success: function(data){
+        //         // highlight the text returned
+        //         console.log(data.og)
+        //         console.log(data.summary)
+        //         $("#highlighttext").text(data.og)
+        //         summaryString = ""
+        //         $("#textsummary").text("")
+        //         for(i = 0; i<data.summary.length; i++){
+        //             $("#textsummary").append("<li>" + data.summary[i] + "</li>")
+        //         }
+        //         return "blah"
+        //     },
+        //     error: function(error){
+        //         return "error"
+        //     }
+        // });
         return "blah"
     });
 
