@@ -53,7 +53,7 @@ def index():
             raw_text = request.form['text']
             if raw_text != '':
                 filecontent = raw_text
-                processed = Conrank.summary(raw_text, sentenceNum)#summarize(raw_text, sentenceNum)
+                processed = ConRank.summary(raw_text, sentenceNum)#summarize(raw_text, sentenceNum)
                 return render_template('summary/processed.html', processed=processed, filecontent=filecontent)
             return ''
 
@@ -72,7 +72,7 @@ def index():
                 basedir = os.path.abspath(os.path.dirname(__file__))
                 file.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
                 tobeprocessed = textract.process(url_for('summary.uploaded_file', filename=filename))
-                processed = Conrank.summary(tobeprocessed, sentenceNum)#summarize(tobeprocessed, sentenceNum)
+                processed = ConRank.summary(tobeprocessed, sentenceNum)#summarize(tobeprocessed, sentenceNum)
 
                 os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
 
@@ -96,7 +96,7 @@ def index():
                     f.write(r.content)
 
                 unprocessed = textract.process(url_for('summary.uploaded_file', filename=filename))
-                processed = Conrank.summary(unprocessed, sentenceNum)#summarize(unprocessed, sentenceNum)
+                processed = ConRank.summary(unprocessed, sentenceNum)#summarize(unprocessed, sentenceNum)
 
                 os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
 
@@ -132,7 +132,7 @@ def smmze():
         text = data.get('data')
         if text != '':
             # send the highlighted text as well
-            processed = Conrank.summary(text, senNum)#summarize(text, senNum)
+            processed = ConRank.summary(text, senNum)#summarize(text, senNum)
 
             return jsonify(og=text,summary=processed)#highlight='blahblah'
         return jsonify(og='',summary='')#highlight=''
