@@ -20,11 +20,9 @@
                         <input type = "text" pattern = "\d*" name = "sentNum" id = "sentNum" placeholder="Number of sentences">
                 </div>
                 <hr>
-                <form action = "{{ url_for('static', filename='upload.php') }}" method="post" enctype="multipart/form-data" id = "fileupload" target="textsummary">
-                    <div>
-                        File: <input name="file" type="file" id = "file" />
-                            <input type="submit" name="upload" id = "upload" value="Upload" />
-                    </div>
+                <form action = "{{ url_for('static', filename='upload.php') }}" method="post" enctype="multipart/form-data" id = "fileupload">
+                    File: <input name="file" type="file" id = "file" />
+                        <input type="submit" name="upload" id = "upload" value="Upload" />
                 </form>
                 <hr>
                 <form method="post" id="textbox">

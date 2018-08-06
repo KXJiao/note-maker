@@ -6,28 +6,32 @@ from werkzeug.exceptions import abort
 from werkzeug.utils import secure_filename
 import os
 from os.path import abspath
-from sumy.parsers.plaintext import PlaintextParser
-from sumy.nlp.tokenizers import Tokenizer 
-from sumy.summarizers.lex_rank import LexRankSummarizer
+# from sumy.parsers.plaintext import PlaintextParser
+# from sumy.nlp.tokenizers import Tokenizer 
+# from sumy.summarizers.lex_rank import LexRankSummarizer
 import requests
 import uuid
 import textract
 import validators
 import sys
+# ConRank imports
+import ConRank
+
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'doc', 'docx', 'html', 'htm', 'epub', 'jpg', 'jpeg', 'png'])
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-def summarize(text, num):
-    parser = PlaintextParser.from_string(text, Tokenizer('english'))
-    summarizer = LexRankSummarizer()
-    summary = summarizer(parser.document, num)
-    summarized = []
-    for sentence in summary:
-        summarized.append(str(sentence))
-    return summarized
+# def summarize(text, num):
+#     parser = PlaintextParser.from_string(text, Tokenizer('english'))
+#     summarizer = LexRankSummarizer()
+#     summary = summarizer(parser.document, num)
+#     summarized = []
+#     for sentence in summary:
+#         summarized.append(str(sentence))
+#     return summarized
+
 
 
 bp = Blueprint('summary', __name__)
@@ -49,7 +53,7 @@ def index():
             raw_text = request.form['text']
             if raw_text != '':
                 filecontent = raw_text
-                processed = summarize(raw_text, sentenceNum)
+                processed = Conrank.summary(raw_text, sentenceNum)#summarize(raw_text, sentenceNum)
                 return render_template('summary/processed.html', processed=processed, filecontent=filecontent)
             return ''
 
@@ -68,7 +72,7 @@ def index():
                 basedir = os.path.abspath(os.path.dirname(__file__))
                 file.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
                 tobeprocessed = textract.process(url_for('summary.uploaded_file', filename=filename))
-                processed = summarize(tobeprocessed, sentenceNum)
+                processed = Conrank.summary(tobeprocessed, sentenceNum)#summarize(tobeprocessed, sentenceNum)
 
                 os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
 
@@ -92,7 +96,7 @@ def index():
                     f.write(r.content)
 
                 unprocessed = textract.process(url_for('summary.uploaded_file', filename=filename))
-                processed = summarize(unprocessed, sentenceNum)
+                processed = Conrank.summary(unprocessed, sentenceNum)#summarize(unprocessed, sentenceNum)
 
                 os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
 
@@ -128,14 +132,14 @@ def smmze():
         text = data.get('data')
         if text != '':
             # send the highlighted text as well
-            processed = summarize(text, senNum)
+            processed = Conrank.summary(text, senNum)#summarize(text, senNum)
 
             return jsonify(og=text,summary=processed)#highlight='blahblah'
         return jsonify(og='',summary='')#highlight=''
 
     elif sm_type == 'upload':
         pass
-    return "lol"
+    return "test"
 @bp.route('/tmp/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
