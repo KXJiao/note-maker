@@ -11,7 +11,7 @@ def addWord(word):
 			tDic=tDic[prtW]
 
 testArr=[]
-lines=open("biology terms.txt").readlines()
+lines=open(url_for("static", filename="biology_terms.txt")).readlines()
 for i in range(len(lines)):
 	lines[i]=lines[i].strip()
 
