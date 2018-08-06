@@ -5,7 +5,7 @@ from nltk.corpus import stopwords
 from nltk.tokenize import TweetTokenizer
 from  nltk.tokenize import sent_tokenize
 from nltk.stem import PorterStemmer
-import bioSearchTree as bst
+from . import bioSearchTree as bst
 import re
 import math
 
