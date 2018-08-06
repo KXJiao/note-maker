@@ -222,7 +222,7 @@ An organic molecule possessing both carboxyl and amino groups. Amino acids serve
 amino group
 A functional group that consists of a nitrogen atom bonded to two hydrogen atoms; can act as a base in solution, accepting a hydrogen ion and acquiring a charge of +1.
 
-aminoacyl—tRNA synthetases
+aminoacyl-tRNA synthetases
 A family of enzymes, at least one for each amino acid, that catalyze the attachment of an amino acid to its specific tRNA molecule.
 
 ammonification
@@ -752,7 +752,7 @@ An intracellular protein to which calcium binds in its function as a second mess
 
 calorie (cal)
 [L. calor, heat]
-The amount of heat energy required to raise the temperature of 1 g of water 1°C; the amount of heat energy that 1 g of water releases when it cools by 1°C. The Calorie (with a capital C), usually used to indicate the energy content of food, is a kilocalorie.
+The amount of heat energy required to raise the temperature of 1 g of water 1C; the amount of heat energy that 1 g of water releases when it cools by 1C. The Calorie (with a capital C), usually used to indicate the energy content of food, is a kilocalorie.
 
 Calvin cycle
 The second of two major stages in photosynthesis (following the light reactions), involving atmospheric CO2 fixation and reduction of the fixed carbon into carbohydrate.
@@ -909,7 +909,7 @@ cellulose
 A structural polysaccharide of cell walls, consisting of glucose monomers joined by (1-4) glycosidic linkages.
 
 Celsius scale
-A temperature scale (°C) equal to 5/9 (°F - 32) that measures the freezing point of water at 0°C and the boiling point of water at 100°C.
+A temperature scale (C) equal to 5/9 (F - 32) that measures the freezing point of water at 0C and the boiling point of water at 100C.
 
 central nervous system (CNS)
 In vertebrate animals, the brain and spinal cord.
@@ -2826,7 +2826,7 @@ kidney
 In vertebrates, the organ that regulates the balance of water and solutes in the blood and the excretion of nitrogenous wastes in the form of urine.
 
 kilocalorie (kcal)
-A thousand calories; the amount of heat energy required to raise the temperature of 1 kg of water 1°C.
+A thousand calories; the amount of heat energy required to raise the temperature of 1 kg of water 1C.
 
 kin selection
 A phenomenon of inclusive fitness, used to explain altruistic behavior between related individuals.
@@ -3345,7 +3345,7 @@ Muscle cell; a long, cylindrical, multinucleated cell containing numerous myofib
 mRNA
 See messenger RNA.
 
-Müllerian mimicry
+Mullerian mimicry
 (myoo-ler-ee-un)
 A mutual mimicry by two unpalatable species.
 
@@ -3406,7 +3406,7 @@ natural killer cell
 A nonspecific defensive cell that attacks tumor cells and destroys infected body cells, especially those harboring viruses.
 
 natural logarithm
-The logarithm (log) to base e where e ˜ 2.718. The natural logarithm is represented by the symbol ln.
+The logarithm (log) to base e where e = 2.718. The natural logarithm is represented by the symbol ln.
 
 natural selection
 Differential success in the reproduction of different phenotypes resulting from the interaction of organisms with their environment. Evolution occurs when natural selection causes changes in relative frequencies of alleles in the gene pool.
@@ -4985,7 +4985,7 @@ species-specific
 Characteristic of (and limited to) a particular species.
 
 specific heat
-The amount of heat that must be absorbed or lost for 1 g of a substance to change its temperature 1°C.
+The amount of heat that must be absorbed or lost for 1 g of a substance to change its temperature 1C.
 
 spectrophotometer
 An instrument that measures the proportions of light of different wavelengths absorbed and transmitted by a pigment solution.
