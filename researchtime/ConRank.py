@@ -11,7 +11,7 @@ import math
 import os
 import gzip
 from urllib.request import urlopen
-import StringIO
+import io
 
 def add(dic,k,v):
 	if k in dic.keys():
@@ -36,7 +36,7 @@ def summary(text, num):
 	filename = "GoogleNews-vectors-negative300-SLIM.bin.gz"
 	outFilePath = "GoogleNews-vectors-negative300-SLIM.bin"
 	response = urlopen(baseURL + filename)
-	compressedFile = StringIO.StringIO(response.read())
+	compressedFile = io.StringIO(response.read())
 	decompressedFile = gzip.GzipFile(fileobj=compressedFile)
 
 
