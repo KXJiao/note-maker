@@ -49,14 +49,22 @@ $(document).ready(function() {
     //     selector: '#textsummary'
     // })
     $('#textsummary').tinymce({
-        script_url: 'static/tinymce.min.js'
+        script_url: 'static/tinymce.min.js',
+        plugins: 'autoresize lists'
+        
     });
     $('#highlighttext').tinymce({
         script_url: 'static/tinymce.min.js',
         toolbar: false,
         menubar:false,
-        statusbar:false
+        statusbar:false,
+        plugins: 'autoresize'
     });
+
+    function highlight(e){
+        alert("hello")
+    }
+
     var files;
     $('#file').on('change', function(event) { 
         files = event.target.files;
@@ -138,10 +146,10 @@ $(document).ready(function() {
 
                 var summaryString = '';
                 //$('#textsummary').val('');
-                $('#textsummary_ifr').contents().find('#tinymce').append('<ul>');
+
                 var addText = '<ul>'
                 for(i = 0; i<data.summary.length; i++){
-                    addText = addText + '\n' + '<li>' + data.summary[i] + '</li>'
+                    addText = addText + '\n' + '<li onclick="highlight(this)">' + data.summary[i] + '</li>'
                     //$('#textsummary_ifr').contents().find('#tinymce').append('<li>' + data.summary[i] + '</li>');
                     //$('#textsummary').append('<li>' + data.summary[i] + '</li>')
                 }
