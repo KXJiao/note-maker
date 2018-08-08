@@ -14,8 +14,8 @@ import uuid
 import textract
 import validators
 import sys
-# ConRank imports
-from . import ConRank
+# ConRanker imports
+from . import ConRanker
 
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'doc', 'docx', 'html', 'htm', 'epub', 'jpg', 'jpeg', 'png'])
@@ -53,7 +53,7 @@ def index():
             raw_text = request.form['text']
             if raw_text != '':
                 filecontent = raw_text
-                processed = ConRank.summary(raw_text, sentenceNum)#summarize(raw_text, sentenceNum)
+                processed = ConRanker.summary(raw_text, sentenceNum)#summarize(raw_text, sentenceNum)
                 return render_template('summary/processed.html', processed=processed, filecontent=filecontent)
             return ''
 
@@ -72,7 +72,7 @@ def index():
                 basedir = os.path.abspath(os.path.dirname(__file__))
                 file.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
                 tobeprocessed = textract.process(url_for('summary.uploaded_file', filename=filename))
-                processed = ConRank.summary(tobeprocessed, sentenceNum)#summarize(tobeprocessed, sentenceNum)
+                processed = ConRanker.summary(tobeprocessed, sentenceNum)#summarize(tobeprocessed, sentenceNum)
 
                 os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
 
@@ -96,7 +96,7 @@ def index():
                     f.write(r.content)
 
                 unprocessed = textract.process(url_for('summary.uploaded_file', filename=filename))
-                processed = ConRank.summary(unprocessed, sentenceNum)#summarize(unprocessed, sentenceNum)
+                processed = ConRanker.summary(unprocessed, sentenceNum)#summarize(unprocessed, sentenceNum)
 
                 os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
 
@@ -132,9 +132,13 @@ def smmze():
         text = data.get('data')
         if text != '':
             # send the highlighted text as well
-            processed = ConRank.summary(text, senNum)#summarize(text, senNum)
+            processed = ConRanker.summary(text, senNum)#summarize(text, senNum)
+            summarized = []
+            for sentence in processed:
+                summarized.append(str(sentence))
 
-            return jsonify(og=text,summary=processed)#highlight='blahblah'
+
+            return jsonify(og=text,summary=summarized)#highlight='blahblah'
         return jsonify(og='',summary='')#highlight=''
 
     elif sm_type == 'upload':

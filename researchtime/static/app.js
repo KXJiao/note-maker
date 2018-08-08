@@ -83,8 +83,8 @@ $(document).ready(function() {
                         contentType: 'application/json; charset=utf8',
                         dataType: 'json',
                         data: JSON.stringify({
-                            name = filename,
-                            type = ext,
+                            name: filename,
+                            type: ext
 
                         })
                     });
@@ -109,44 +109,55 @@ $(document).ready(function() {
 
         console.log(sentNum);
         console.log(text);
-        // $.ajax({
-        //     url: '/summarize',
-        //     type: 'post',
-        //     contentType: 'application/json; charset=utf8',
-        //     dataType: 'json',
-        //     data: JSON.stringify({
-        //         type: 'text',
-        //         num: sentNum,
-        //         data: text
-        //     }),
-        //     success: function(data){
-        //         // highlight the text returned
-        //         console.log(data.og)
-        //         console.log(data.summary)
-        //         $("#highlighttext").text(data.og)
-        //         summaryString = ""
-        //         $("#textsummary").text("")
-        //         for(i = 0; i<data.summary.length; i++){
-        //             $("#textsummary").append("<li>" + data.summary[i] + "</li>")
-        //         }
-        //         return "blah"
-        //     },
-        //     error: function(error){
-        //         return "error"
-        //     }
-        // });
+        $.ajax({
+            url: '/summarize',
+            type: 'post',
+            contentType: 'application/json; charset=utf8',
+            dataType: 'json',
+            data: JSON.stringify({
+                type: 'text',
+                num: sentNum,
+                data: text
+            }),
+            success: function(data){
+                // highlight the text returned
+                console.log(data.og)
+                console.log(data.summary)
+                $("#highlighttext").text(data.og)
+                summaryString = ""
+                $("#textsummary").text("")
+                for(i = 0; i<data.summary.length; i++){
+                    $("#textsummary").append("<li>" + data.summary[i] + "</li>")
+                }
+                return "blah"
+            },
+            error: function(error){
+                return "error"
+            }
+        });
         return "blah"
     });
 
     $('#externalurl').on('submit', function(e){
         e.preventDefault();
-        var sentNum = $('#sentNum').val()
+        var sentNum = $('#sentNum').val();
+        var url = $('#url').val();
+        //verify the url 
+
+        fetch(url).then(res => res.blob()).then(blob => {
+            let objectURL = URL.createObjectURL(blob);
+            var data = new FormData();
+            data.append('file', objectURL)
+            $.ajax({
+
+            });
+        });
 
 
     });
         
     function afterSuccess(){
-        console.log("successful file upload")
+        console.log("successful file upload");
     }
 
             

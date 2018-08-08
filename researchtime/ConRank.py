@@ -38,10 +38,13 @@ def summary(text, num):
 	# response = urlopen(baseURL + filename)
 	# compressedFile = io.BytesIO(response.read())
 	# decompressedFile = gzip.GzipFile(fileobj=compressedFile)
-
-
-	model=gensim.models.KeyedVectors.load_word2vec_format("https://github.com/eyaler/word2vec-slim/blob/master/GoogleNews-vectors-negative300-SLIM.bin.gz?raw=true", binary=True, limit=100000)
+	print("summary started")
+	basedir = os.path.abspath(os.path.dirname(__file__))
+	googlepath = os.path.join(basedir, "static", "GoogleNews-vectors-negative300.bin")
+	#"https://s3.amazonaws.com/dl4j-distribution/GoogleNews-vectors-negative300.bin.gz"
+	model=gensim.models.KeyedVectors.load_word2vec_format(googlepath, binary=True, limit=100000)
 	#words=open("subInfo.txt").read()
+	print("loaded GoogleNews-vectors-negative300")
 	words = text
 	txt = words
 
@@ -59,14 +62,14 @@ def summary(text, num):
 	words=tknzr.tokenize(words)
 	words=words+phsWords
 	words=[w for w in words if not w in string.punctuation]
-#words = [w[0].lower()+w[1:] if w[0].lower()+w[1:] in model.vocab else w for w in words]
+	#words = [w[0].lower()+w[1:] if w[0].lower()+w[1:] in model.vocab else w for w in words]
 	stop_words = set(stopwords.words('english'))
 	words = [w for w in words if not w in stop_words]
 	words = [w for w in words if len(w)>1 or w in string.ascii_letters or w in string.digits]
 	setWords=set(words)
 	setWords=list(setWords)
-#print(words)
-#print(setWords)
+	#print(words)
+	#print(setWords)
 
 	graph={}
 	pairGraph={}
@@ -84,10 +87,10 @@ def summary(text, num):
 					add(graph,setWords[i],dup)
 					pairGraph[(setWords[i],setWords[x])]=similVal
 					pairGraph[(setWords[x],setWords[i])]=similVal
-#print(notCons)
-### Algorithm ###
+	#print(notCons)
+	### Algorithm ###
 	keyTerms=[t for t in setWords if t in bioTerms or t[0].lower()+t[1:] in bioTerms]
-# finding frequencies
+	# finding frequencies
 	freqDic={}
 	wToStem={}
 	ps = PorterStemmer()
@@ -95,12 +98,12 @@ def summary(text, num):
 		stem=ps.stem(t)
 		addOne(freqDic,stem)
 		wToStem[t]=stem
-# calculation for avg. freq.
+	# calculation for avg. freq.
 	freqArr=[freqDic[k] for k in freqDic.keys()]
 	tot=sum(freqArr)
 	avgFreq=tot/(len(freqArr))
-###
-# context calculation
+	###
+	# context calculation
 	pardCount=0
 	for kt in keyTerms:
 		if kt in notCons:
@@ -114,33 +117,33 @@ def summary(text, num):
 				if kt not in notCons:
 					contScore+=pairGraph[(kt,t)]
 			contDic[t]=contScore/divNum
-###
-# finding avg context score
+	###
+	# finding avg context score
 	contArr=[contDic[k] for k in contDic.keys()]
 	tot=sum(contArr)
 	avgCont=tot/(len(contArr))
-###
-# giving context score to notCons and keyTerms
+	###
+	# giving context score to notCons and keyTerms
 	for t in notCons:
 		if t not in keyTerms:
 			contDic[t]=avgCont
 	for t in keyTerms:
 		contDic[t]=1
-# finding the importance of each term
+	# finding the importance of each term
 	termVal={}
 	print(avgFreq)
 	for t in setWords:
 		termVal[t]=contDic[t]*12 + (freqDic[wToStem[t]]-avgFreq)*1  #Vary results by changing factors
 		print(t+": "+ str(contDic[t]*12)+ " + "+ str(freqDic[wToStem[t]]-avgFreq) + " ("+wToStem[t]+": "+str(freqDic[wToStem[t]])+")")
-###
-#finding important sentences
+	###
+	#finding important sentences
 	sentScoreDic={}
 	sents=sent_tokenize(txt)
 	for sen in sents:
 		sentScore=0
 		for t in setWords:
 			hits=[m.start() for m in re.finditer(r"\b" +re.escape(t)+r"\b", sen)]
-		#sentScore+=len(hits)*termVal[t]
+			#sentScore+=len(hits)*termVal[t]
 			if len(hits)>0:
 				sentScore+=termVal[t]
 		sentScoreDic[sen]=sentScore
