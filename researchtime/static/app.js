@@ -45,8 +45,18 @@
 
 
 $(document).ready(function() { 
-    console.log('ready');
-
+    // tinymce.init({
+    //     selector: '#textsummary'
+    // })
+    $('#textsummary').tinymce({
+        script_url: 'static/tinymce.min.js'
+    });
+    $('#highlighttext').tinymce({
+        script_url: 'static/tinymce.min.js',
+        toolbar: false,
+        menubar:false,
+        statusbar:false
+    });
     var files;
     $('#file').on('change', function(event) { 
         files = event.target.files;
@@ -71,7 +81,7 @@ $(document).ready(function() {
                 //send another ajax to do the textract/stuff 
                 if(typeof data.error === 'undefined'){
                     var filename = data.files[Object.keys(data.files)[0]];
-                    var ext = filename.slice((Math.max(0, filename.lastIndexOf(".")) || Infinity) + 1);
+                    var ext = filename.slice((Math.max(0, filename.lastIndexOf('.')) || Infinity) + 1);
 
                     $.each(data.files, function(key, value){
                         filenames.append(value);
@@ -95,14 +105,14 @@ $(document).ready(function() {
             },
             error: function(jqXHR, textStatus, errorThrown){
                 console.log(textStatus);
-                return "error"
-            } //return "error: " + errorThrown
+                return 'error'
+            } //return 'error: ' + errorThrown
         })
     });
 
     var request;
     $('#textbox').on('submit', function(event){
-        console.log("reached textbox");
+        console.log('reached textbox');
         event.preventDefault();
         var sentNum = $('#sentNum').val()
         var text = $('#textarea').val()
@@ -121,21 +131,31 @@ $(document).ready(function() {
             }),
             success: function(data){
                 // highlight the text returned
-                console.log(data.og)
-                console.log(data.summary)
-                $("#highlighttext").text(data.og)
-                summaryString = ""
-                $("#textsummary").text("")
+                console.log(data.og);
+                console.log(data.summary);
+                tinymce.get('highlighttext').setContent(data.og);
+                //$('#highlighttext').text(data.og);
+
+                var summaryString = '';
+                //$('#textsummary').val('');
+                $('#textsummary_ifr').contents().find('#tinymce').append('<ul>');
+                var addText = '<ul>'
                 for(i = 0; i<data.summary.length; i++){
-                    $("#textsummary").append("<li>" + data.summary[i] + "</li>")
+                    addText = addText + '\n' + '<li>' + data.summary[i] + '</li>'
+                    //$('#textsummary_ifr').contents().find('#tinymce').append('<li>' + data.summary[i] + '</li>');
+                    //$('#textsummary').append('<li>' + data.summary[i] + '</li>')
                 }
-                return "blah"
+                addText = addText + '</ul>'
+                $('#textsummary_ifr').contents().find('#tinymce').append(addText);
+                
+               
+                return 'blah'
             },
             error: function(error){
-                return "error"
+                return 'error'
             }
         });
-        return "blah"
+        return 'blah'
     });
 
     $('#externalurl').on('submit', function(e){
@@ -157,14 +177,14 @@ $(document).ready(function() {
     });
         
     function afterSuccess(){
-        console.log("successful file upload");
+        console.log('successful file upload');
     }
 
             
     function beforeSubmit(){
         if (window.File && window.FileReader && window.FileList && window.Blob){
             if( !$('#file').val()) {
-                $("#output").html("No file selected.");
+                $('#output').html('No file selected.');
                 return false;
             }
         
@@ -184,21 +204,21 @@ $(document).ready(function() {
                 case 'application/epub+zip':
                     break;
                 default:
-                    $("#output").html("<b>"+ftype+"</b> Unsupported file type!");
+                    $('#output').html('<b>'+ftype+'</b> Unsupported file type!');
                     return false
             }
         
             //Allowed file size is less than 50 MB (1MB: 1048576)
             if(fsize>52428800){
-                $("#output").html("<b>"+bytesToSize(fsize) +"</b> Too big file! <br />File is too big, it should be less than 50 MB.");
+                $('#output').html('<b>'+bytesToSize(fsize) +'</b> Too big file! <br />File is too big, it should be less than 50 MB.');
                 return false;
             }
                 
-            // $("#output").html("");  
+            // $('#output').html('');  
         }
         else{
             //Output error to older unsupported browsers that doesn't support HTML5 File API
-            $("#output").html("Please upgrade your browser, because your current browser lacks some new features we need!");
+            $('#output').html('Please upgrade your browser, because your current browser lacks some new features we need!');
             return false;
         }
     }
@@ -211,4 +231,5 @@ $(document).ready(function() {
         return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
     }
 
+    
 }); 
