@@ -19,6 +19,7 @@
             <div id ="input">
                 <!-- action= "{{ url_for('static', filename='upload.php') }}" -->
                 <div>
+<<<<<<< HEAD
                     <button id="gotoupload">Upload</button>
                     <button id="gototext">Paste Text</button>
                     <button id="gotourl">URL</button>
@@ -38,17 +39,42 @@
                 </form>
                 <form method="post" id="externalurl">
                     <input type = "text" pattern = "\d*" name = "sentNum" id = "sentNum" placeholder="Number of sentences">
+=======
+                        <input type = "text" pattern = "\d*" name = "sentNum" id = "sentNum" placeholder="Number of sentences">
+                </div>
+                <hr>
+                <form action = "{{ url_for('static', filename='upload.php') }}" method="post" enctype="multipart/form-data" id = "fileupload">
+                    File: <input name="file" type="file" id = "file" />
+                        <input type="submit" name="upload" id = "upload" value="Upload" />
+                </form>
+                <hr>
+                <form method="post" id="textbox">
+                        <textarea name = "text" id = "textarea" rows = "8" cols = "70" style="resize: vertical;"></textarea><br>
+                        <input name = "compare" type = "submit" value = "Summarize">
+                </form>
+                <hr>
+                <form target = "textsummary" method="post" id="externalurl">
+>>>>>>> f9ee29cbce0cc4db72dfae5b6b340891d72330c5
                     <div>
                         <input id = "url" type="text" name="url" placeholder="External URL">
                         <input type="submit" name="external" value = "Submit">
                     </div>
                 </form>
             </div>
+<<<<<<< HEAD
             <textarea style="height:100% !important;" id="highlighttext"></textarea>
         </div>
 
         <div id = "right" style = "float:right; width:50%;">
             <textarea id="textsummary" style="position: absolute; background: transparent; width:100% !important; height:100% !important;"></textarea>
+=======
+            <div id="highlighttext"></div>
+        </div>
+
+        <div id = "right" style = "float:right; width:50%;">
+<!--             <iframe name = "textsummary" frameborder='0' noresize='noresize' style='position: absolute; background: transparent; width: 50%; height:100%;' src="/textsummary"></iframe> -->
+            <div id="textsummary" style='position: absolute; background: transparent; width: 50%; height:100%;'></div>
+>>>>>>> f9ee29cbce0cc4db72dfae5b6b340891d72330c5
         </div>
     </div>
     

@@ -19,6 +19,13 @@ from . import ConRanker
 
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'doc', 'docx', 'html', 'htm', 'epub', 'jpg', 'jpeg', 'png', 'gif'])
+=======
+# ConRank imports
+from . import ConRank
+
+
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'doc', 'docx', 'html', 'htm', 'epub', 'jpg', 'jpeg', 'png'])
+>>>>>>> f9ee29cbce0cc4db72dfae5b6b340891d72330c5
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -53,7 +60,11 @@ def index():
             raw_text = request.form['text']
             if raw_text != '':
                 filecontent = raw_text
+<<<<<<< HEAD
                 processed = ConRanker.summary(raw_text, sentenceNum)#summarize(raw_text, sentenceNum)
+=======
+                processed = ConRank.summary(raw_text, sentenceNum)#summarize(raw_text, sentenceNum)
+>>>>>>> f9ee29cbce0cc4db72dfae5b6b340891d72330c5
                 return render_template('summary/processed.html', processed=processed, filecontent=filecontent)
             return ''
 
@@ -72,7 +83,11 @@ def index():
                 basedir = os.path.abspath(os.path.dirname(__file__))
                 file.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
                 tobeprocessed = textract.process(url_for('summary.uploaded_file', filename=filename))
+<<<<<<< HEAD
                 processed = ConRanker.summary(tobeprocessed, sentenceNum)#summarize(tobeprocessed, sentenceNum)
+=======
+                processed = ConRank.summary(tobeprocessed, sentenceNum)#summarize(tobeprocessed, sentenceNum)
+>>>>>>> f9ee29cbce0cc4db72dfae5b6b340891d72330c5
 
                 os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
 
@@ -96,7 +111,11 @@ def index():
                     f.write(r.content)
 
                 unprocessed = textract.process(url_for('summary.uploaded_file', filename=filename))
+<<<<<<< HEAD
                 processed = ConRanker.summary(unprocessed, sentenceNum)#summarize(unprocessed, sentenceNum)
+=======
+                processed = ConRank.summary(unprocessed, sentenceNum)#summarize(unprocessed, sentenceNum)
+>>>>>>> f9ee29cbce0cc4db72dfae5b6b340891d72330c5
 
                 os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
 
@@ -132,6 +151,7 @@ def smmze():
         text = data.get('data')
         if text != '':
             # send the highlighted text as well
+<<<<<<< HEAD
             processed = ConRanker.summary(text, senNum)#summarize(text, senNum)
             summarized = []
             for sentence in processed:
@@ -206,6 +226,16 @@ def filesmmze():
 
 
 
+=======
+            processed = ConRank.summary(text, senNum)#summarize(text, senNum)
+
+            return jsonify(og=text,summary=processed)#highlight='blahblah'
+        return jsonify(og='',summary='')#highlight=''
+
+    elif sm_type == 'upload':
+        pass
+    return "test"
+>>>>>>> f9ee29cbce0cc4db72dfae5b6b340891d72330c5
 @bp.route('/tmp/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)

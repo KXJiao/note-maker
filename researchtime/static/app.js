@@ -209,6 +209,7 @@ $(document).ready(function() {
     function afterSuccess(){
         console.log('successful file upload');
     }
+    }
 
             
     function beforeSubmit(){
