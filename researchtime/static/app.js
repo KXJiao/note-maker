@@ -106,7 +106,7 @@ $(document).ready(function() {
         //event.stopPropagation();
         event.preventDefault();
 
-        var sentNum = $('#sentNum').val();
+        var sentNum = $('#sentNum1').val();
         if(!sentNum || isNaN(sentNum)){
             sentNum = '5';
         }
@@ -148,7 +148,7 @@ $(document).ready(function() {
     var request;
     $('#textbox').on('submit', function(event){
         event.preventDefault();
-        var sentNum = $('#sentNum').val()
+        var sentNum = $('#sentNum2').val()
         var text = $('#textarea').val()
 
         $.ajax({

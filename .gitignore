@@ -5,4 +5,5 @@ venv/
 instance/
 dist/
 build/
-__pycache__
+__pycache__/
+researchtime.egg-info/
