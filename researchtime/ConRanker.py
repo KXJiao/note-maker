@@ -27,10 +27,7 @@ def findCount(sub,text):
 
 def summary(text, num):
     start = time.time()
-    try:
-        text = text.decode("utf-8")
-    except AttributeError:
-        pass
+    
     words= text#open("subInfo.txt").read()
     sents= text.splitlines()#open("subInfo.txt").readlines()
 

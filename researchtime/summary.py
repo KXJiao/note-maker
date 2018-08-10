@@ -188,7 +188,14 @@ def filesmmze():
             basedir = os.path.abspath(os.path.dirname(__file__))
             file.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
             tobeprocessed = textract.process(url_for('summary.uploaded_file', filename=filename))
-            print(tobeprocessed)
+            # print(tobeprocessed)
+
+            try:
+                tobeprocessed = tobeprocessed.decode("utf-8")
+            except AttributeError:
+                pass
+
+
             processed = ConRanker.summary(tobeprocessed, sentenceNum)#summarize(tobeprocessed, sentenceNum)
 
             os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
