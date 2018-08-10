@@ -45,9 +45,9 @@
 
 
 $(document).ready(function() { 
-    // tinymce.init({
-    //     selector: '#textsummary'
-    // })
+
+    ////////////////////////////////Stuff for TinyMCE editable textbox////////////////
+
     $('#textsummary').tinymce({
         script_url: 'static/tinymce.min.js',
         plugins: 'autoresize lists'
@@ -61,6 +61,8 @@ $(document).ready(function() {
         plugins: 'autoresize'
     });
 
+    /////////////////////////////////////////////////////////////////////////////////
+
     function highlight(e){
         alert("hello")
     }
@@ -69,7 +71,7 @@ $(document).ready(function() {
     $('#file').on('change', function(event) { 
         files = event.target.files;
     }); 
-
+/////////////////////File uploader
     $('#fileupload').on('submit', function(event){
         event.stopPropagation();
         event.preventDefault();
@@ -80,20 +82,21 @@ $(document).ready(function() {
         });
 
         $.ajax({
-            url: 'upload.php',
+            url: 'static/upload.php',
             type: 'post',
             contentType: false,
             processData: false,
             data: data,
             success: function(data, textStatus, jqXHR){
                 //send another ajax to do the textract/stuff 
+                console.log("reached upload success 1");
                 if(typeof data.error === 'undefined'){
                     var filename = data.files[Object.keys(data.files)[0]];
                     var ext = filename.slice((Math.max(0, filename.lastIndexOf('.')) || Infinity) + 1);
 
-                    $.each(data.files, function(key, value){
-                        filenames.append(value);
-                    });
+                    // $.each(data.files, function(key, value){
+                    //     filenames.append(value);
+                    // });
 
                     $.ajax({
                         url: '/summarize',
@@ -103,7 +106,6 @@ $(document).ready(function() {
                         data: JSON.stringify({
                             name: filename,
                             type: ext
-
                         })
                     });
                 }
@@ -118,15 +120,14 @@ $(document).ready(function() {
         })
     });
 
+
+///////////////////////////Textbox
     var request;
     $('#textbox').on('submit', function(event){
-        console.log('reached textbox');
         event.preventDefault();
         var sentNum = $('#sentNum').val()
         var text = $('#textarea').val()
 
-        console.log(sentNum);
-        console.log(text);
         $.ajax({
             url: '/summarize',
             type: 'post',
@@ -138,14 +139,10 @@ $(document).ready(function() {
                 data: text
             }),
             success: function(data){
-                // highlight the text returned
-                console.log(data.og);
-                console.log(data.summary);
+                //data.og = original text, data.summary = array of summary points
                 tinymce.get('highlighttext').setContent(data.og);
-                //$('#highlighttext').text(data.og);
 
-                var summaryString = '';
-                //$('#textsummary').val('');
+                //handle text highlighting here: when clicking the summary point, will highlight in original text
 
                 var addText = '<ul>'
                 for(i = 0; i<data.summary.length; i++){
@@ -160,12 +157,14 @@ $(document).ready(function() {
                 return 'blah'
             },
             error: function(error){
-                return 'error'
+                console.log("error for textbox")
             }
         });
         return 'blah'
     });
 
+
+    /////////////////////////URL
     $('#externalurl').on('submit', function(e){
         e.preventDefault();
         var sentNum = $('#sentNum').val();

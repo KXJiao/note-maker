@@ -142,7 +142,21 @@ def smmze():
         return jsonify(og='',summary='')#highlight=''
 
     elif sm_type == 'upload':
-        pass
+        uploadfilename = data.get('name')
+        uploadfileext = data.get('ext')
+
+        unprocessed = textract.process(url_for('summary.uploaded_file', filename=uploadfilename))
+        processed = ConRanker.summary(unprocessed, senNum)
+        summarized = []
+        for sentence in processed:
+            summarized.append(str(sentence))
+
+        return jsonify(og=unprocessed,summary=summarized)
+        
+
+
+
+
     return "test"
 @bp.route('/tmp/<filename>')
 def uploaded_file(filename):
