@@ -67,56 +67,79 @@ $(document).ready(function() {
         alert("hello")
     }
 
+    $('#fileupload').show();
+    $('#textbox').hide();
+    $('#externalurl').hide();
+
+    $('#gotoupload').click(function(e){
+        $('#textbox').fadeOut(function(){
+            $('#fileupload').fadeIn('slow');
+        });
+        $('#externalurl').fadeOut(function(){
+            $('#fileupload').fadeIn('slow');
+        });
+        
+    });
+    $('#gototext').click(function(e){
+        $('#fileupload').fadeOut(function(){
+            $('#textbox').fadeIn('slow');
+        });
+        $('#externalurl').fadeOut(function(){
+            $('#textbox').fadeIn('slow');
+        });
+    });
+    $('#gotourl').click(function(e){
+        $('#fileupload').fadeOut(function(){
+            $('#externalurl').fadeIn('slow');
+        });
+        $('#textbox').fadeOut(function(){
+            $('#externalurl').fadeIn('slow');
+        });
+    });
+
     var files;
     $('#file').on('change', function(event) { 
         files = event.target.files;
     }); 
 /////////////////////File uploader
     $('#fileupload').on('submit', function(event){
-        event.stopPropagation();
+        //event.stopPropagation();
         event.preventDefault();
 
+        var sentNum = $('#sentNum').val();
+        if(!sentNum || isNaN(sentNum)){
+            sentNum = '5';
+        }
         var data = new FormData();
-        $.each(files, function(key, value){
-            data.append(key, value);
-        });
+        
+        data.append('sentNum', sentNum);
+        data.append('file', $('#file')[0].files[0]);
+        // $.each(files, function(i, file){
+        //      //console.log("file no: " + i + " file: " + file)
+        //      data.append('file-' + (i+1), file);
+        // });
+        //data.append($('#file'[0]))
 
+        for (var pair of data.entries()) {
+            console.log(pair[0]+ ', ' + pair[1]); 
+        }
         $.ajax({
-            url: 'static/upload.php',
-            type: 'post',
+            url: '/fileupload',
+            type: 'POST',
             contentType: false,
             processData: false,
-            data: data,
-            success: function(data, textStatus, jqXHR){
-                //send another ajax to do the textract/stuff 
-                console.log("reached upload success 1");
-                if(typeof data.error === 'undefined'){
-                    var filename = data.files[Object.keys(data.files)[0]];
-                    var ext = filename.slice((Math.max(0, filename.lastIndexOf('.')) || Infinity) + 1);
-
-                    // $.each(data.files, function(key, value){
-                    //     filenames.append(value);
-                    // });
-
-                    $.ajax({
-                        url: '/summarize',
-                        type: 'post',
-                        contentType: 'application/json; charset=utf8',
-                        dataType: 'json',
-                        data: JSON.stringify({
-                            name: filename,
-                            type: ext
-                        })
-                    });
+            dataType: 'json',
+            data: data,         
+            success: function(data){
+                tinymce.get('highlighttext').setContent(data.og);
+                var addText = '<ul>'
+                for(i = 0; i<data.summary.length; i++){
+                    addText = addText + '\n' + '<li onclick="highlight(this)">' + data.summary[i] + '</li>'
                 }
-                else{
-                    console.log(data.error);
-                }
-            },
-            error: function(jqXHR, textStatus, errorThrown){
-                console.log(textStatus);
-                return 'error'
-            } //return 'error: ' + errorThrown
+                addText = addText + '</ul>'
+                $('#textsummary_ifr').contents().find('#tinymce').append(addText);
+
+            }
         })
     });
 

@@ -18,7 +18,7 @@ import sys
 from . import ConRanker
 
 
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'doc', 'docx', 'html', 'htm', 'epub', 'jpg', 'jpeg', 'png'])
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'doc', 'docx', 'html', 'htm', 'epub', 'jpg', 'jpeg', 'png', 'gif'])
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -142,8 +142,12 @@ def smmze():
         return jsonify(og='',summary='')#highlight=''
 
     elif sm_type == 'upload':
-        uploadfilename = data.get('name')
-        uploadfileext = data.get('ext')
+
+        uploadingfile = data.get('file')
+        print("FILE UPLOAD IS: ")
+        print(uploadingfile)
+        # uploadfilename = data.get('name')
+        # uploadfileext = data.get('ext')
 
         unprocessed = textract.process(url_for('summary.uploaded_file', filename=uploadfilename))
         processed = ConRanker.summary(unprocessed, senNum)
@@ -152,12 +156,49 @@ def smmze():
             summarized.append(str(sentence))
 
         return jsonify(og=unprocessed,summary=summarized)
-        
-
-
 
 
     return "test"
+
+@bp.route('/fileupload', methods=['GET', 'POST'])
+def filesmmze():
+    if request.method == 'POST':
+
+        sentenceNum = 5
+        try:
+            snum = int(request.form['sentNum'])
+            if snum >0 and snum < 100:
+                sentenceNum = snum
+        except:
+            sentenceNum = 5
+
+        if 'file' not in request.files:
+                print("no file")
+                return jsonify(error='nofile')
+        file = request.files['file']
+        print(file)
+        print(file.filename)
+        if file.filename == '':
+            return 'No selected file'
+        if file and allowed_file(file.filename):
+            ext = file.filename.rsplit('.', 1)[1].lower()
+            file.filename = str(uuid.uuid4()) + '.' + ext
+            filename = secure_filename(file.filename)
+            print("uploading: " + filename)
+            basedir = os.path.abspath(os.path.dirname(__file__))
+            file.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
+            tobeprocessed = textract.process(url_for('summary.uploaded_file', filename=filename))
+            print(tobeprocessed)
+            processed = ConRanker.summary(tobeprocessed, sentenceNum)#summarize(tobeprocessed, sentenceNum)
+
+            os.remove(os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename))
+
+            return jsonify(og=tobeprocessed,summary=processed)
+        print('File not allowed')
+        return 'File not allowed'
+
+
+
 @bp.route('/tmp/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
