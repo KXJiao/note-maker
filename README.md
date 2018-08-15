@@ -1,2 +1,3 @@
 # Note Maker
-[Link on Heroku](https://note-maker.herokuapp.com/)
+
+Updated version: https://github.com/KXJiao/note-maker
